@@ -1,10 +1,13 @@
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+module GProb where
+
+import Graphics.Collage exposing (..)
+import Graphics.Element exposing (..)
+import Color exposing (..)
 import Signal exposing (Signal, Address)
 import String
 import Random exposing (Seed)
 import Maybe exposing (withDefault)
+import Window
 -- MODEL
 
 type alias Model =
@@ -35,6 +38,9 @@ emptyModel =
     , boardLength = 100
     }
 
+pSiz = 10
+vSpacing = 25
+
 -- UPDATE
 
 type Action
@@ -42,6 +48,7 @@ type Action
     | PauseSim
     | ResetSim
     | Tick
+    | NoOp
 
 update : Action -> Model -> Model
 update action model =
@@ -90,6 +97,45 @@ firstSeed = Random.initialSeed <| round startTime
 -- removeFromList i xs =
 --   (List.take i xs) ++ (List.drop (i+1) xs)
 
+-- VIEW
+view : (Int, Int) -> Model -> Element
+view (w',h') model =
+  let
+    (w,h) = (toFloat w', toFloat h')
+    pRects = List.indexedMap drawPs model.participants
+    topLeftPrects = List.map (move (-w/2 + 50, h/2 - 50)) pRects
+  in
+    collage w' h'
+      ([ rect w h
+          |> filled (rgb 174 238 238)
+       ] ++ topLeftPrects)
+
+drawPs : Int -> Participant -> Form
+drawPs index p =
+    rect pSiz pSiz
+      |> filled (rgb 0 0 0)
+      |> move (toFloat p.xpos, toFloat index * -vSpacing)
+
+    
+
+-- INPUT
+main : Signal Element
+main =
+  Signal.map2 view Window.dimensions (Signal.foldp update defaultModel actions.signal)
+
+-- actions from user input
+actions : Signal.Mailbox Action
+actions =
+  Signal.mailbox NoOp
+
+defaultModel = { emptyModel 
+             | participants =
+    [ {id = 0, xpos = 0}
+    , {id = 1, xpos = 0}
+    , {id = 2, xpos = 0}
+    , {id = 3, xpos = 0}
+    , {id = 4, xpos = 0}
+    ]}
 
 -- Somewhat annoyingly, we need to do this to get random numbers
 port startTime : Float
