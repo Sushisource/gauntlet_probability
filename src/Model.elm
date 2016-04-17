@@ -14,6 +14,7 @@ type alias Model =
     , currentRFloat : Float
     , currentP : Int
     , participants : Array Participant
+    , numParticipants : Int
     , success_prob : Float
     , success_steps : Int
     , fail_steps : Int
@@ -35,6 +36,7 @@ emptyModel =
     , currentP = 0
     , participants = Array.empty
     , success_prob = 0.5
+    , numParticipants = 10
     , success_steps = 5
     , fail_steps = 2
     , fail_steps_all = 2
@@ -44,10 +46,4 @@ emptyModel =
     }
 
 initial = { emptyModel 
-             | participants = Array.fromList
-    [ {id = 0, xpos = 0}
-    , {id = 1, xpos = 0}
-    , {id = 2, xpos = 0}
-    , {id = 3, xpos = 0}
-    , {id = 4, xpos = 0}
-    ]}
+             | participants = Array.initialize emptyModel.numParticipants (\n -> {id = n, xpos = 0})}

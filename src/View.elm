@@ -33,8 +33,8 @@ drawPs index p =
       |> filled (rgb 0 0 0)
       |> move (toFloat p.xpos, toFloat index * -vSpacing)
 
-drawSlider : String -> Int -> Int -> Signal.Address a -> (String -> a) -> Html
-drawSlider name maxRange curval address action =
+drawSlider : String -> b -> b -> b -> b -> Signal.Address a -> (String -> a) -> Html
+drawSlider name minRange maxRange stepSiz curval address action =
     let id' = name ++ "_slider"
         scurval = toString curval
     in
@@ -42,7 +42,9 @@ drawSlider name maxRange curval address action =
     [ text name
     , input [ id id'
             , type' "range"
+            , Html.Attributes.min (toString minRange)
             , Html.Attributes.max (toString maxRange)
+            , step (toString stepSiz)
             , value scurval
             , Events.on "change" Events.targetValue (\v -> Signal.message address (action v))
             ] []
@@ -58,10 +60,10 @@ view address model =
       [ button [Events.onClick address PauseSim] [text "Pause"]
       , button [Events.onClick address ResetSim] [text "Reset"]
       , button [Events.onClick address ResumeSim] [text "Go"]
-      , drawSlider "SuccessProbability" 100 (round (model.success_prob * 100)) address Actions.UpdateSProb
-      , drawSlider "SuccessSteps" 100 model.success_steps address Actions.UpdateSSteps
-      , drawSlider "FailSteps" 100 model.fail_steps address Actions.UpdateFSteps
-      , drawSlider "FailStepsAll" 100 model.fail_steps_all address Actions.UpdateFASteps
+      , drawSlider "SuccessProbability" 0.01 1.01 0.01 model.success_prob address Actions.UpdateSProb
+      , drawSlider "SuccessSteps" 0 30 1 model.success_steps address Actions.UpdateSSteps
+      , drawSlider "FailSteps" 0 30 1 model.fail_steps address Actions.UpdateFSteps
+      , drawSlider "FailStepsAll" 0 30 1 model.fail_steps_all address Actions.UpdateFASteps
       ]
   ]
 
