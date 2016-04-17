@@ -34,14 +34,14 @@ performTick chosenIx model curIx curP =
     in 
        if wasHeads then
          if curIsChosen then
-           { curP | xpos = curP.xpos + model.success_steps }
+           moveP model.success_steps curP
          else
            curP
        else
          if curIsChosen then
-           { curP | xpos = curP.xpos - model.fail_steps }
+           moveP model.fail_steps curP
          else
-           { curP | xpos = curP.xpos - model.fail_steps_all }
+           moveP model.fail_steps_all curP
 
 moveP :  Int -> Participant -> Participant
 moveP amount p =
