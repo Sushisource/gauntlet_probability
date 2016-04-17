@@ -18,7 +18,7 @@ update action model =
                ({model | nextSeed = seed}, Effects.tick Tick)
         Tick t ->
             -- Could make this random, for now it's just always p1
-            let (chosenOne, s2) = randInt model |> Debug.log "chosen"
+            let (chosenOne, s2) = randInt model
                 pModder = (performTick chosenOne model)
                 updatedPs = Array.indexedMap pModder model.participants
             in
