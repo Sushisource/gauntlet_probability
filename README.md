@@ -8,6 +8,9 @@ Building
 --------
 `elm make src/Main.elm --output main.html`
 
+###...wut? How I elm?
+http://elm-lang.org/install
+
 Viewing
 --------
 Open main.html, foo.
