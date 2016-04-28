@@ -41,6 +41,16 @@ update action model =
             ({model | fail_steps = (String.toInt s |> Result.withDefault model.fail_steps)}, Effects.none)
         UpdateFASteps s ->
             ({model | fail_steps_all = (String.toInt s |> Result.withDefault model.fail_steps_all)}, Effects.none)
+        UpdateParticipants s ->
+            let curP = model.numParticipants
+                nuP = String.toInt s |> Result.withDefault curP
+                pDelta = nuP - model.numParticipants
+                nuPArr = if pDelta > 0 then
+                           Array.append model.participants (Array.initialize pDelta (\n -> {id = n + curP, xpos = 0}))
+                         else
+                           Array.slice 0 nuP model.participants
+            in
+            ({model | numParticipants = nuP, participants = nuPArr }, Effects.none)
         NoOp ->
             (model, Effects.none)
 

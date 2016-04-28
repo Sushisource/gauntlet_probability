@@ -8,10 +8,11 @@ type Action
     | ResetSim
     | ResumeSim
     | Tick Time
-    -- I could probably not have 4 different actions here by doing some JSON
+    -- I could probably not have 5 different actions here by doing some JSON
     -- funny business, but this is fine for now.
     | UpdateSProb String
     | UpdateSSteps String
     | UpdateFSteps String
     | UpdateFASteps String
+    | UpdateParticipants String
     | NoOp

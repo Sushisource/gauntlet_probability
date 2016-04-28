@@ -58,12 +58,15 @@ view address model =
   [ div [] [ renderSim (800, 600) model |> fromElement ]
   , div []
       [ button [Events.onClick address PauseSim] [text "Pause"]
+      , button [Events.onClick address ResumeSim] [text "Resume/Start"]
       , button [Events.onClick address ResetSim] [text "Reset"]
-      , button [Events.onClick address ResumeSim] [text "Go"]
+      , h3 [] [text "Sliders work best when the sim is paused"]
+      , h4 [] [text "Set FailStepsAll to zero to witness gauntlet magicks"]
       , drawSlider "SuccessProbability" 0.01 1.01 0.01 model.success_prob address Actions.UpdateSProb
       , drawSlider "SuccessSteps" 0 30 1 model.success_steps address Actions.UpdateSSteps
       , drawSlider "FailSteps" 0 30 1 model.fail_steps address Actions.UpdateFSteps
       , drawSlider "FailStepsAll" 0 30 1 model.fail_steps_all address Actions.UpdateFASteps
+      , drawSlider "Participants" 0 30 1 model.numParticipants address Actions.UpdateParticipants
       ]
   ]
 
